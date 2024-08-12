@@ -7,6 +7,7 @@ import os
 import tempfile
 import uuid
 
+
 class DocumentProcessor:
     """
     This class encapsulates the functionality for processing uploaded PDF documents using Streamlit
@@ -47,6 +48,8 @@ class DocumentProcessor:
             # Allow only type `pdf`
             # Allow multiple PDFs for ingestion
             #####################################
+
+            label='pdfUploader',type = 'pdf',accept_multiple_files= True
         )
         
         if uploaded_files is not None:
@@ -66,10 +69,12 @@ class DocumentProcessor:
                 # Use PyPDFLoader here to load the PDF and extract pages.
                 # https://python.langchain.com/docs/modules/data_connection/document_loaders/pdf#using-pypdf
                 # You will need to figure out how to use PyPDFLoader to process the temporary file.
-                
+                loader =PyPDFLoader(temp_file_path)
+                pages_result= loader.load_and_split()
                 # Step 3: Then, Add the extracted pages to the 'pages' list.
                 #####################################
-                
+                for i in pages_result:
+                    self.pages.append(i)
                 # Clean up by deleting the temporary file.
                 os.unlink(temp_file_path)
             
