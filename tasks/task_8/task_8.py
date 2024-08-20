@@ -125,13 +125,21 @@ class QuizGenerator:
 
         for _ in range(self.num_questions):
             ##### YOUR CODE HERE #####
-            question_str = # Use class method to generate question
-            
+            question_str = self.generate_question_with_vectorstore()
+            if self.validate_question(question):
+                print("Successfully generateed question")
+                self.question_bank.append(question)
+            else:
+                print("Duplicate or invalid question detected !!!")
             ##### YOUR CODE HERE #####
-            try:
+            for i in range(3):
+                question_str=self.generate_question_with_vectorstore
+            
+                try:
                 # Convert the JSON String to a dictionary
-            except json.JSONDecodeError:
-                print("Failed to decode question JSON.")
+                    question=json.loads(question_str)
+                except json.JSONDecodeError:
+                    print("Failed to decode question JSON.")
                 continue  # Skip this iteration if JSON decoding fails
             ##### YOUR CODE HERE #####
 
@@ -170,6 +178,12 @@ class QuizGenerator:
         # Consider missing 'question' key as invalid in the dict object
         # Check if a question with the same text already exists in the self.question_bank
         ##### YOUR CODE HERE #####
+        is_unique= True
+
+        for question_iterated in self.question_bank:
+            if(question_iterated['question']==question['question']):
+                is_unique= False
+                break
         return is_unique
 
 
@@ -178,12 +192,12 @@ if __name__ == "__main__":
     
     embed_config = {
         "model_name": "textembedding-gecko@003",
-        "project": "YOUR-PROJECT-ID-HERE",
+        "project": "quizzli",
         "location": "us-central1"
     }
     
     screen = st.empty()
-    with screen.container():
+    with screen.container(): 
         st.header("Quiz Builder")
         processor = DocumentProcessor()
         processor.ingest_documents()
